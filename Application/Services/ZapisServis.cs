@@ -1,6 +1,7 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.Models;
+using Domain.Pravila;
 using Shared;
 
 namespace Application.Services;
@@ -8,6 +9,7 @@ namespace Application.Services;
 // Polazna struktura servisa; poslovne operacije nisu implementirane.
 public sealed class ZapisServis
 {
+    /*()*/
     private readonly IZapisiRepozitorijum _repozitorijum;
     private readonly ILoggerServis _logger;
 
@@ -16,11 +18,32 @@ public sealed class ZapisServis
         _repozitorijum = repozitorijum ?? throw new ArgumentNullException(nameof(repozitorijum));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
-
-    public Result Dodaj(Zapis zapis)
+    /*()*/
+    public Result<Guid> DodajProcentualni(string naziv, string opis, string sifra, decimal procenat, DateTime datum) //<Guid> u slucaju uspjeha vraca tip id - a
     {
         // TODO: definisati poslovna pravila i pozvati repozitorijum.
         // Primer pokazuje gde pripada use case, ne daje rešenje zadatka.
-        return Result.Failure("zadatak.nije_implementirano", "Implementirati prema specifikaciji.");
+
+        var popust = new ProcentualniPopust     //novi objekat - jedan popust //var - C# sam odlucuje tip
+        {
+            Naziv = naziv,
+            Opis = opis,
+            SifraKupona = sifra,
+            Procenat = procenat,
+            DatumVazenja = datum
+            //Id, Status se ne pisu jer se kreiraju sami (Id dobije novi Guid.NewGuid())
+        };
+
+        string? greska = ValidacijaPopusta.Provjeri(popust); //Provjera pravila T3
+        if(greska != null)
+        {
+            _logger.Loguj("Neuspjesno dodavanje: " + greska);       //upisuje neuspijeh u log.txt to trazi T4
+            return Result<Guid>.Failure("VALIDATION_ERROR", greska);//vraca neuspijeh i odmah izlazi iz metode      kod se ne izvrsava, pa se popust ne cuva T4
+        }   
+
+        _repozitorijum.Sacuvaj(popust);             //uspjeh se cuva
+        _logger.Loguj("Uspjesno dodavanje procentualnog popusta: " + popust.Id);//upisuje u log
+        return Result<Guid>.Success(popust.Id); //vraca uspjeh i id novog popusta F1
     }
+    
 }

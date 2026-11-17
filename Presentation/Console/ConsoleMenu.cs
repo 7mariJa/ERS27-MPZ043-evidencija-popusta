@@ -17,8 +17,47 @@ public sealed class ConsoleMenu
 
     public void Run()
     {
-        _io.WriteLine("ERS27 - prakticni zadatak");
-        _io.WriteLine("Poslovne operacije nisu implementirane u pocetnom sablonu.");
-        _io.WriteLine("Implementirati meni prema funkcionalnim zahtevima F1-F6.");
+        while (true)
+        {
+            _io.WriteLine("1 - Dodaj procentualni popust");
+            _io.WriteLine("0 - Izlaz");
+            string izbor = _io.ReadLine();
+
+            if( izbor == "1" ) DodajProcentualni();
+            else if( izbor == "0" ) break;
+            else _io.WriteLine("Nepoznata opcija.");
+        }
+    }
+
+    public void DodajProcentualni()
+    {
+        _io.Write("Unesite naziv popusta: ");
+        string naziv = _io.ReadLine();
+
+        _io.Write("Unesite opis popusta: ");
+        string opis = _io.ReadLine();
+
+        _io.Write("Unesite šifru kupona: ");
+        string sifra = _io.ReadLine();
+
+        _io.WriteLine("Unesite procenat popusta (decimalni broj):");
+        if(!decimal.TryParse(_io.ReadLine(), out decimal procenat))
+        {
+            _io.WriteLine("Neispravan unos procenata. Operacija prekinuta.");
+            return;
+        }
+
+        _io.WriteLine("Unesite datum važenja (yyyy-MM-dd):");
+        if(!DateTime.TryParse(_io.ReadLine(), out DateTime datum))
+        {
+            _io.WriteLine("Neispravan unos datuma. Operacija prekinuta.");
+            return;
+        }
+
+        var rezultat = _container.Servis.DodajProcentualni(naziv, opis, sifra, procenat, datum);
+        if (rezultat.IsSuccess)
+            _io.WriteLine("Uspješno dodan popust sa ID: " + rezultat.Value);
+        else
+            _io.WriteLine("Greška: " + rezultat.Error!.Message);
     }
 }
