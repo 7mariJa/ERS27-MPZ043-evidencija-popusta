@@ -1,3 +1,5 @@
+using Domain.Enums;
+
 namespace Domain.Models;
 
 // Zajednički osnovni tip iz koga se mogu izvesti modeli konkretnog zadatka.
@@ -8,4 +10,6 @@ public abstract class Zapis
     public string Naziv { get; init; } = string.Empty;
     public string Opis { get; init; } = string.Empty;
     public DateTimeOffset KreiranoUtc { get; init; } = DateTimeOffset.UtcNow;
+
+    public StatusPopusta Status { get; init; } = StatusPopusta.Neaktivan;
 }
