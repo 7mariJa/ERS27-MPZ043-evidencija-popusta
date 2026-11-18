@@ -91,5 +91,28 @@ public sealed class ZapisServis
         _logger.Loguj("Uspjesno aktiviran popust: " + id);
         return Result.Success();
     }
+
+    // F6 - deaktiviranje popusta
+    public Result Deaktiviraj(Guid id)
+    {
+        var pronadjen = _repozitorijum.Pronadji(id);
+        if (pronadjen.IsFailure)
+        {
+            _logger.Loguj("Neuspjesno deaktiviranje, ne postoji popust: " + id);
+            return Result.Failure("nema", "Popust sa tim ID-jem ne postoji.");
+        }
+
+        Zapis popust = pronadjen.Value!;
+        string? greska = popust.Deaktiviraj();
+        if (greska != null)
+        {
+            _logger.Loguj("Neuspjesno deaktiviranje: " + greska);
+            return Result.Failure("nedozvoljeno", greska);
+        }
+
+        _repozitorijum.Azuriraj(popust);
+        _logger.Loguj("Uspjesno deaktiviran popust: " + id);
+        return Result.Success();
+    }
     
 }
