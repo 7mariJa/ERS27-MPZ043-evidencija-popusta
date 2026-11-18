@@ -18,6 +18,9 @@ public sealed class JsonZapisiRepozitorijum : IZapisiRepozitorijum
     public Result Sacuvaj(Zapis zapis) =>
         Result.Failure("repo.nije_implementirano", "Implementirati JSON upis.");
 
+    public Result Azuriraj(Zapis zapis) =>
+        Result.Failure("repo.nije_implementirano", "Implementirati JSON izmjenu.");
+
     public Result<Zapis> Pronadji(Guid id) =>
         Result<Zapis>.Failure("repo.nije_implementirano", "Implementirati JSON citanje.");
 

@@ -26,6 +26,7 @@ public sealed class ConsoleMenu
             _io.WriteLine("2 - Dodaj fiksni popust");
             _io.WriteLine("3 - Prikazi popuste");
             _io.WriteLine("4 - Pretrazi po sifri kupona");
+            _io.WriteLine("5 - Aktiviraj popust");
             _io.WriteLine("0 - Izlaz");
             string izbor = _io.ReadLine();
 
@@ -33,6 +34,7 @@ public sealed class ConsoleMenu
             else if( izbor == "2" ) DodajFiksni();
             else if( izbor == "3" ) PrikaziPopuste();
             else if( izbor == "4" ) PretraziPoSifri();
+            else if( izbor == "5" ) AktivirajPopust();
             else if( izbor == "0" ) break;
             else _io.WriteLine("Nepoznata opcija.");
         }
@@ -170,5 +172,21 @@ public sealed class ConsoleMenu
         IPopustFormater formater = new SazetiFormater();
         foreach (Zapis zapis in rezultat.Value)
             _io.WriteLine(formater.Formatiraj(zapis));
+    }
+
+    public void AktivirajPopust()
+    {
+        _io.Write("Unesite ID popusta: ");
+        if (!Guid.TryParse(_io.ReadLine(), out Guid id))
+        {
+            _io.WriteLine("Neispravan ID.");
+            return;
+        }
+
+        var rezultat = _container.Servis.Aktiviraj(id);
+        if (rezultat.IsSuccess)
+            _io.WriteLine("Popust je aktiviran.");
+        else
+            _io.WriteLine("Greška: " + rezultat.Error!.Message);
     }
 }
