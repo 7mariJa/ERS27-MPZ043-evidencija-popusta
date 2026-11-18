@@ -24,4 +24,14 @@ public abstract class Zapis
         Status = StatusPopusta.Aktivan;
         return null;
     }
+
+    // F6 - pravilo: popust se moze deaktivirati samo ako je bio aktivan
+    public string? Deaktiviraj()
+    {
+        if (Status != StatusPopusta.Aktivan)
+            return "Popust se ne moze deaktivirati jer nije aktivan.";
+
+        Status = StatusPopusta.Neaktivan;
+        return null;
+    }
 }
