@@ -8,8 +8,6 @@ namespace Domain.Models
 {
     public class FiksniPopust : Zapis
     {
-        public string SifraKupona { get; set; } = string.Empty;
-        public DateTime DatumVazenja { get; set; }
         public decimal Iznos { get; set; }
     }
 }

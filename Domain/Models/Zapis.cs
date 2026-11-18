@@ -12,4 +12,6 @@ public abstract class Zapis
     public DateTimeOffset KreiranoUtc { get; init; } = DateTimeOffset.UtcNow;
 
     public StatusPopusta Status { get; init; } = StatusPopusta.Neaktivan;
+    public string SifraKupona { get; set; } = string.Empty;
+    public DateTime DatumVazenja { get; set; }
 }
