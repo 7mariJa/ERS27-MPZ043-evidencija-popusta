@@ -28,4 +28,20 @@ public sealed class PregledServis
         List<Zapis> vazeci = svi.Value!.Where(z => z.DatumVazenja.Date >= DateTime.Today).ToList();
         return Result<IReadOnlyList<Zapis>>.Success(vazeci);
     }
+
+    // F4 - pretraga po sifri kupona, ne razlikuje velika i mala slova
+    public Result<IReadOnlyList<Zapis>> PretraziPoSifri(string sifra)
+    {
+        if (string.IsNullOrWhiteSpace(sifra))
+            return Result<IReadOnlyList<Zapis>>.Failure("prazna_sifra", "Unesite sifru za pretragu.");
+
+        var svi = _repozitorijum.Svi();
+        if (svi.IsFailure)
+            return svi;
+
+        List<Zapis> pronadjeni = svi.Value!
+            .Where(z => z.SifraKupona.Contains(sifra.Trim(), StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        return Result<IReadOnlyList<Zapis>>.Success(pronadjeni);
+    }
 }
