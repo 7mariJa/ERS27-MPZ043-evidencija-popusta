@@ -39,7 +39,7 @@ Za prikaz F3 definisan je ugovor `Presentation/Interfaces/IPopustFormater` sa me
 
 Pravila P3 nisu u repozitorijumima, nego u `ValidacijaPopusta` (Domain) i servisima (Application), pa ne zavise od nacina cuvanja.
 
-**Kako se provjerava:** aplikacija radi isto sa `dotnet run --project Presentation -- in-memory` i `dotnet run --project Presentation -- json` - sve opcije menija F1-F6 daju iste rezultate i iste poruke o greskama. U JSON rezimu podaci ostaju i poslije ponovnog pokretanja.
+**Kako se provjerava:** u `Tests/Database/RepozitorijumUgovorTests` je apstraktna klasa sa testovima ugovora (cuvanje i citanje obe vrste popusta, nepostojeci ID, azuriranje). Iste testove nasljedjuju `InMemoryRepozitorijumTests` i `JsonRepozitorijumTests`, pa se izvrsavaju nad oba repozitorijuma i oba moraju proci. `JsonRepozitorijumTests.PonovnoOtvaranje_PodaciSuSacuvani` provjerava da podaci ostaju poslije ponovnog otvaranja datoteke. Aplikacija takodje radi isto sa `dotnet run --project Presentation -- in-memory` i `dotnet run --project Presentation -- json`.
 
 ## ISP — раздвајање интерфејса
 
