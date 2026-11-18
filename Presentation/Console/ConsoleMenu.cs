@@ -25,12 +25,14 @@ public sealed class ConsoleMenu
             _io.WriteLine("1 - Dodaj procentualni popust");
             _io.WriteLine("2 - Dodaj fiksni popust");
             _io.WriteLine("3 - Prikazi popuste");
+            _io.WriteLine("4 - Pretrazi po sifri kupona");
             _io.WriteLine("0 - Izlaz");
             string izbor = _io.ReadLine();
 
             if( izbor == "1" ) DodajProcentualni();
             else if( izbor == "2" ) DodajFiksni();
             else if( izbor == "3" ) PrikaziPopuste();
+            else if( izbor == "4" ) PretraziPoSifri();
             else if( izbor == "0" ) break;
             else _io.WriteLine("Nepoznata opcija.");
         }
@@ -143,6 +145,29 @@ public sealed class ConsoleMenu
             return;
         }
 
+        foreach (Zapis zapis in rezultat.Value)
+            _io.WriteLine(formater.Formatiraj(zapis));
+    }
+
+    public void PretraziPoSifri()
+    {
+        _io.Write("Unesite sifru kupona: ");
+        string sifra = _io.ReadLine();
+
+        var rezultat = _container.Pregled.PretraziPoSifri(sifra);
+        if (rezultat.IsFailure)
+        {
+            _io.WriteLine("Greška: " + rezultat.Error!.Message);
+            return;
+        }
+
+        if (rezultat.Value!.Count == 0)
+        {
+            _io.WriteLine("Nema popusta sa tom sifrom.");
+            return;
+        }
+
+        IPopustFormater formater = new SazetiFormater();
         foreach (Zapis zapis in rezultat.Value)
             _io.WriteLine(formater.Formatiraj(zapis));
     }
