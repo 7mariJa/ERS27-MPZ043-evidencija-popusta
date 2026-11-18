@@ -15,6 +15,7 @@ public sealed class AppContainer
     public required IZapisiRepozitorijum Repozitorijum { get; init; }
     public required ILoggerServis Logger { get; init; }
     public required ZapisServis Servis { get; init; }
+    public required PregledServis Pregled { get; init; }
 
     public static AppContainer Create(string rezim)
     {
@@ -27,7 +28,8 @@ public sealed class AppContainer
             Io = new SystemConsoleIO(),
             Repozitorijum = repo,
             Logger = logger,
-            Servis = new ZapisServis(repo, logger)
+            Servis = new ZapisServis(repo, logger),
+            Pregled = new PregledServis(repo)
         };
     }
 }
