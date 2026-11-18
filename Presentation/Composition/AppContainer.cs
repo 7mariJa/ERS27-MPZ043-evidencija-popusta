@@ -17,12 +17,14 @@ public sealed class AppContainer
     public required ZapisServis Servis { get; init; }
     public required PregledServis Pregled { get; init; }
 
-    public static AppContainer Create(string rezim)
+    public static AppContainer Create(string rezim, string vrstaLoggera)
     {
         IZapisiRepozitorijum repo = rezim.Equals("json", StringComparison.OrdinalIgnoreCase)
             ? new JsonZapisiRepozitorijum("podaci.json")
             : new InMemoryZapisiRepozitorijum();
-        ILoggerServis logger = new FileLoggerServis();
+        ILoggerServis logger = vrstaLoggera.Equals("konzola", StringComparison.OrdinalIgnoreCase)
+            ? new ConsoleLoggerServis()
+            : new FileLoggerServis();
         return new AppContainer
         {
             Io = new SystemConsoleIO(),
