@@ -20,10 +20,12 @@ public sealed class ConsoleMenu
         while (true)
         {
             _io.WriteLine("1 - Dodaj procentualni popust");
+            _io.WriteLine("2 - Dodaj fiksni popust");
             _io.WriteLine("0 - Izlaz");
             string izbor = _io.ReadLine();
 
             if( izbor == "1" ) DodajProcentualni();
+            else if( izbor == "2" ) DodajFiksni();
             else if( izbor == "0" ) break;
             else _io.WriteLine("Nepoznata opcija.");
         }
@@ -55,6 +57,38 @@ public sealed class ConsoleMenu
         }
 
         var rezultat = _container.Servis.DodajProcentualni(naziv, opis, sifra, procenat, datum);
+        if (rezultat.IsSuccess)
+            _io.WriteLine("Uspješno dodan popust sa ID: " + rezultat.Value);
+        else
+            _io.WriteLine("Greška: " + rezultat.Error!.Message);
+    }
+
+    public void DodajFiksni()
+    {
+        _io.Write("Unesite naziv popusta: ");
+        string naziv = _io.ReadLine();
+
+        _io.Write("Unesite opis popusta: ");
+        string opis = _io.ReadLine();
+
+        _io.Write("Unesite šifru kupona: ");
+        string sifra = _io.ReadLine();
+
+        _io.WriteLine("Unesite iznos popusta (decimalni broj):");
+        if(!decimal.TryParse(_io.ReadLine(), out decimal iznos))
+        {
+            _io.WriteLine("Neispravan unos iznosa. Operacija prekinuta.");
+            return;
+        }
+
+        _io.WriteLine("Unesite datum važenja (yyyy-MM-dd):");
+        if(!DateTime.TryParse(_io.ReadLine(), out DateTime datum))
+        {
+            _io.WriteLine("Neispravan unos datuma. Operacija prekinuta.");
+            return;
+        }
+
+        var rezultat = _container.Servis.DodajFiksni(naziv, opis, sifra, iznos, datum);
         if (rezultat.IsSuccess)
             _io.WriteLine("Uspješno dodan popust sa ID: " + rezultat.Value);
         else

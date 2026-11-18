@@ -13,10 +13,19 @@ namespace Domain.Pravila
         {
             if(string.IsNullOrWhiteSpace(p.Naziv) || string.IsNullOrWhiteSpace(p.Opis))
                 return "Naziv i Opis ne smiju biti prazni!";
-            if(p.Procenat <= 0 || p.Procenat > 90)
+            if(p.Procenat < 1 || p.Procenat > 90)
                 return "Procenat popusta mora biti izmedju 1 i 90!";
             return null;
 
+        }
+
+        public static string? Provjeri(FiksniPopust p)
+        {
+            if(string.IsNullOrWhiteSpace(p.Naziv) || string.IsNullOrWhiteSpace(p.Opis))
+                return "Naziv i Opis ne smiju biti prazni!";
+            if(p.Iznos <= 0)
+                return "Iznos popusta mora biti pozitivan!";
+            return null;
         }
     }
 }

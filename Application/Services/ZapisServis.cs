@@ -45,5 +45,28 @@ public sealed class ZapisServis
         _logger.Loguj("Uspjesno dodavanje procentualnog popusta: " + popust.Id);//upisuje u log
         return Result<Guid>.Success(popust.Id); //vraca uspjeh i id novog popusta F1
     }
+
+    public Result<Guid> DodajFiksni(string naziv, string opis, string sifra, decimal iznos, DateTime datum)
+    {
+        var popust = new FiksniPopust
+        {
+            Naziv = naziv,
+            Opis = opis,
+            SifraKupona = sifra,
+            Iznos = iznos,
+            DatumVazenja = datum
+        };
+
+        string? greska = ValidacijaPopusta.Provjeri(popust);
+        if(greska != null)
+        {
+            _logger.Loguj("Neuspjesno dodavanje: " + greska);
+            return Result<Guid>.Failure("VALIDATION_ERROR", greska);
+        }
+
+        _repozitorijum.Sacuvaj(popust);
+        _logger.Loguj("Uspjesno dodavanje fiksnog popusta: " + popust.Id);
+        return Result<Guid>.Success(popust.Id);
+    }
     
 }
