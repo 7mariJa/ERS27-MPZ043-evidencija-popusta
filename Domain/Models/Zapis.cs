@@ -11,7 +11,17 @@ public abstract class Zapis
     public string Opis { get; init; } = string.Empty;
     public DateTimeOffset KreiranoUtc { get; init; } = DateTimeOffset.UtcNow;
 
-    public StatusPopusta Status { get; init; } = StatusPopusta.Neaktivan;
+    public StatusPopusta Status { get; set; } = StatusPopusta.Neaktivan;
     public string SifraKupona { get; set; } = string.Empty;
     public DateTime DatumVazenja { get; set; }
+
+    // F5 - pravilo: popust se moze aktivirati samo ako datum vazenja nije prosao
+    public string? Aktiviraj()
+    {
+        if (DatumVazenja.Date < DateTime.Today)
+            return "Popust se ne moze aktivirati jer je datum vazenja prosao.";
+
+        Status = StatusPopusta.Aktivan;
+        return null;
+    }
 }

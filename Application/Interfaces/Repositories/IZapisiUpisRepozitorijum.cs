@@ -7,5 +7,6 @@ namespace Application.Interfaces.Repositories;
 public interface IZapisiUpisRepozitorijum
 {
     Result Sacuvaj(Zapis zapis);
+    Result Azuriraj(Zapis zapis);
     Result Obrisi(Guid id);
 }

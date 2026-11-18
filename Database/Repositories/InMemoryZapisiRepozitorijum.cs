@@ -16,6 +16,16 @@ public sealed class InMemoryZapisiRepozitorijum : IZapisiRepozitorijum
         return Result.Success();                //vraca obican result bez <Guid>, jer ovdje nema sta drugo da se vrati osim uspjeha ili neuspjeha
     }
 
+    public Result Azuriraj(Zapis zapis)         //zamjenjuje stari zapis novim (isti Id)
+    {
+        int index = _zapisi.FindIndex(x => x.Id == zapis.Id);
+        if (index == -1)
+            return Result.Failure("nema", "Zapis nije pronadjen.");
+
+        _zapisi[index] = zapis;
+        return Result.Success();
+    }
+
     public Result<Zapis> Pronadji(Guid id)      //trazi popust po id-u
     {
         Zapis? z = _zapisi.FirstOrDefault(x => x.Id == id); //lambda izraz (za svako x provjeri da li je njegov Id = trazenom Id)
